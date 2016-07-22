@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Entities\Post;
+use Illuminate\Support\Facades\Auth;
 
 class PostsController extends Controller
 {
@@ -39,7 +40,12 @@ class PostsController extends Controller
      */
     public function create()
     {
-        return view('posts.create');
+        if (Auth::check() && Auth::user()->admin) {
+
+            return view('posts.create');
+        }
+
+        return redirect(url('/'));
     }
 
     /**
@@ -78,7 +84,6 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
-        $this->middleware('isAdmin');
         $post = $this->postRepo->edit($id);
         return view('posts.edit', compact('post'));
     }
