@@ -84,8 +84,12 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
-        $post = $this->postRepo->edit($id);
-        return view('posts.edit', compact('post'));
+        if (Auth::check() && Auth::user()->admin) {
+            $post = $this->postRepo->edit($id);
+            return view('posts.edit', compact('post'));
+        }
+
+        return redirect(url('/'));
     }
 
     /**
