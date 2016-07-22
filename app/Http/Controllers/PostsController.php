@@ -115,7 +115,11 @@ class PostsController extends Controller
      */
     public function destroy($id)
     {
-        $this->postRepo->destroy($id);
-        return redirect(route('posts.index'));
+        if (Auth::check() && Auth::user()->admin) {
+            $this->postRepo->destroy($id);
+            return redirect(route('posts.index'));
+        }
+
+        return redirect(url('/'));
     }
 }
